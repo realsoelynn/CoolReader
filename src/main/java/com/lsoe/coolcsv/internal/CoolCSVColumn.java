@@ -9,6 +9,9 @@ public class CoolCSVColumn {
     private int columnIndex;
     private String columnType; // must be java full qualifier class name
 
+    private CoolCSVColumn() {
+    }
+
     public CoolCSVColumn(String columnName, int columnIndex, String columnType) {
         this.columnName = columnName;
         this.columnIndex = columnIndex;
