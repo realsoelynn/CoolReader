@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.lsoe.coolcsv.exception.ColumnNameNotFoundException;
-import com.lsoe.coolcsv.internal.CoolCSVColumn;
 import com.lsoe.coolcsv.test.enums.Country;
 
 public class CoolCSVRecordTest {

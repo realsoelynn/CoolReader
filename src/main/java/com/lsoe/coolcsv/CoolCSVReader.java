@@ -8,7 +8,6 @@ import com.googlecode.jcsv.CSVStrategy;
 import com.googlecode.jcsv.reader.CSVReader;
 import com.googlecode.jcsv.reader.internal.CSVReaderBuilder;
 import com.googlecode.jcsv.reader.internal.DefaultCSVEntryParser;
-import com.lsoe.coolcsv.internal.CoolCSVColumn;
 
 /**
  * TODO: Describe purpose and behavior of CoolCSVReader
@@ -28,7 +27,7 @@ public class CoolCSVReader {
 		this.columns = columns;
 	}
 
-	public CoolCSVRecord[] readAll() throws Exception {
+	public CoolCSVRecord[] readAllAsCoolCSVRecord() throws Exception {
 
 		ArrayList<CoolCSVRecord> records = new ArrayList<CoolCSVRecord>();
 		Reader reader = new FileReader(csvFileURI);
@@ -56,5 +55,24 @@ public class CoolCSVReader {
 		}
 
 		return records.toArray(new CoolCSVRecord[records.size()]);
+	}
+
+	public Object[][] readAll() throws Exception {
+
+		CoolCSVRecord[] csvRecords = readAllAsCoolCSVRecord();
+		ArrayList<Object[]> records = new ArrayList<Object[]>();
+
+		for (CoolCSVRecord csvRecord : csvRecords) {
+
+			ArrayList<Object> record = new ArrayList<Object>();
+			for (CoolCSVColumn column : columns) {
+				record.add(csvRecord.get(column.getColumnIndex(),
+						column.getColumnType()));
+			}
+
+			records.add(record.toArray(new Object[record.size()]));
+		}
+
+		return records.toArray(new Object[records.size()][]);
 	}
 }

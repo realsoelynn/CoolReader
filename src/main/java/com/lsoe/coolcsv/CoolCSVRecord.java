@@ -3,196 +3,215 @@ package com.lsoe.coolcsv;
 import com.lsoe.coolcsv.exception.ColumnIndexNotValidException;
 import com.lsoe.coolcsv.exception.ColumnNameNotFoundException;
 import com.lsoe.coolcsv.exception.CoolCSVException;
-import com.lsoe.coolcsv.internal.CoolCSVColumn;
 
 /**
- * TODO: Describe purpose and behavior of CoolCSVRecord
- * Currently, it is only programmed for read-only mode
+ * TODO: Describe purpose and behavior of CoolCSVRecord Currently, it is only
+ * programmed for read-only mode
  * 
  */
 public class CoolCSVRecord {
 
-    private String[] record;
-    private CoolCSVColumn[] columns;
-    private boolean columnPropertiesDefined;
+	private String[] record;
+	private CoolCSVColumn[] columns;
+	private boolean columnPropertiesDefined;
 
-    public CoolCSVRecord(String[] record) {
+	public CoolCSVRecord(String[] record) {
 
-        this.columns = null;
-        this.record = record;
-        this.columnPropertiesDefined = false;
-    }
+		this.columns = null;
+		this.record = record;
+		this.columnPropertiesDefined = false;
+	}
 
-    public CoolCSVRecord(CoolCSVColumn[] columns, String[] record) {
+	public CoolCSVRecord(CoolCSVColumn[] columns, String[] record) {
 
-        this.columns = columns;
-        this.record = record;
-        this.columnPropertiesDefined = true;
-    }
+		this.columns = columns;
+		this.record = record;
+		this.columnPropertiesDefined = true;
+	}
 
-    public boolean isColumnPropertiesDefined() {
-        return columnPropertiesDefined;
-    }
+	public boolean isColumnPropertiesDefined() {
+		return columnPropertiesDefined;
+	}
 
-    public String get(String columnName) throws CoolCSVException {
+	public String get(String columnName) throws CoolCSVException {
 
-        int columnIndex = getColumnIndexInternalUse(columnName);
+		int columnIndex = getColumnIndexInternalUse(columnName);
 
-        return getRecord(columnIndex);
-    }
+		return getRecord(columnIndex);
+	}
 
-    public String get(int columnIndex) throws Exception {
+	public String get(int columnIndex) throws Exception {
 
-        return getRecord(columnIndex);
-    }
+		return getRecord(columnIndex);
+	}
 
-    public <T> T get(String columnName, Class<T> columnTypeClass) throws CoolCSVException {
+	public <T> T get(String columnName, Class<T> columnTypeClass)
+			throws Exception {
 
-        int columnIndex = getColumnIndexInternalUse(columnName);
+		int columnIndex = getColumnIndexInternalUse(columnName);
 
-        return get(columnIndex, columnTypeClass);
-    }
+		return get(columnIndex, columnTypeClass);
+	}
 
-    @SuppressWarnings("unchecked")
-    public <T> T get(int columnIndex, Class<T> columnTypeClass) throws CoolCSVException {
+	@SuppressWarnings("unchecked")
+	public <T> T get(int columnIndex, Class<T> columnTypeClass)
+			throws Exception {
 
-        T result = null;
-        if (columnTypeClass.isEnum()) {
-            for (Object enumConstant : columnTypeClass.getEnumConstants()) {
-                if (enumConstant.toString().equals(getRecord(columnIndex))) {
-                    result = (T) enumConstant;
-                    break;
-                }
-            }
+		T result = null;
+		if (columnTypeClass.isEnum()) {
+			for (Object enumConstant : columnTypeClass.getEnumConstants()) {
+				if (enumConstant.toString().equals(getRecord(columnIndex))) {
+					result = (T) enumConstant;
+					break;
+				}
+			}
 
-            if (result == null) {
-                throw new CoolCSVException(String.format("%s is not defined under the enum type %s.",
-                        record[columnIndex], columnTypeClass.getName()));
-            }
-        } else {
-            throw new CoolCSVException("Currently, only enum type is supported.");
-        }
+			if (result == null) {
+				throw new CoolCSVException(String.format(
+						"%s is not defined under the enum type %s.",
+						record[columnIndex], columnTypeClass.getName()));
+			}
+		} else if (columnTypeClass.getName().equals(String.class.getName())) {
+			result = (T) get(columnIndex);
+		} else if (columnTypeClass.getName().equals(Boolean.class.getName())) {
+			result = (T) getBoolean(columnIndex);
+		} else if (columnTypeClass.getName().equals(Integer.class.getName())) {
+			result = (T) getInt(columnIndex);
+		} else if (columnTypeClass.getName().equals(Double.class.getName())) {
+			result = (T) getDouble(columnIndex);
+		} else if (columnTypeClass.getName().equals(Long.class.getName())) {
+			result = (T) getLong(columnIndex);
+		} else {
+			throw new CoolCSVException("Currently, only enum is supported.");
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    public boolean getBoolean(String columnName) throws Exception {
+	public Boolean getBoolean(String columnName) throws Exception {
 
-        int columnIndex = getColumnIndexInternalUse(columnName);
+		int columnIndex = getColumnIndexInternalUse(columnName);
 
-        return getBoolean(columnIndex);
-    }
+		return getBoolean(columnIndex);
+	}
 
-    public boolean getBoolean(int columnIndex) throws Exception {
+	public Boolean getBoolean(int columnIndex) throws Exception {
 
-        return Boolean.parseBoolean(getRecord(columnIndex));
-    }
+		return Boolean.parseBoolean(getRecord(columnIndex));
+	}
 
-    public double getDouble(String columnName) throws Exception {
+	public Double getDouble(String columnName) throws Exception {
 
-        int columnIndex = getColumnIndexInternalUse(columnName);
+		int columnIndex = getColumnIndexInternalUse(columnName);
 
-        return getDouble(columnIndex);
-    }
+		return getDouble(columnIndex);
+	}
 
-    public double getDouble(int columnIndex) throws Exception {
+	public Double getDouble(int columnIndex) throws Exception {
 
-        return Double.parseDouble(getRecord(columnIndex));
-    }
+		return Double.parseDouble(getRecord(columnIndex));
+	}
 
-    public int getInt(String columnName) throws Exception {
+	public Integer getInt(String columnName) throws Exception {
 
-        int columnIndex = getColumnIndexInternalUse(columnName);
+		int columnIndex = getColumnIndexInternalUse(columnName);
 
-        return getInt(columnIndex);
-    }
+		return getInt(columnIndex);
+	}
 
-    public int getInt(int columnIndex) throws Exception {
+	public Integer getInt(int columnIndex) throws Exception {
 
-        return Integer.parseInt(getRecord(columnIndex));
-    }
+		return Integer.parseInt(getRecord(columnIndex));
+	}
 
-    public long getLong(String columnName) throws Exception {
+	public Long getLong(String columnName) throws Exception {
 
-        int columnIndex = getColumnIndexInternalUse(columnName);
+		int columnIndex = getColumnIndexInternalUse(columnName);
 
-        return getLong(columnIndex);
-    }
+		return getLong(columnIndex);
+	}
 
-    public long getLong(int columnIndex) throws Exception {
+	public Long getLong(int columnIndex) throws Exception {
 
-        return Long.parseLong(getRecord(columnIndex));
-    }
+		return Long.parseLong(getRecord(columnIndex));
+	}
 
-    public boolean has(String columnName) {
+	public boolean has(String columnName) {
 
-        boolean result = false;
+		boolean result = false;
 
-        if (isColumnPropertiesDefined()) {
-            for (CoolCSVColumn column : columns) {
-                if (column.getColumnName().equals(columnName)) {
-                    result = true;
-                    break;
-                }
-            }
-        }
+		if (isColumnPropertiesDefined()) {
+			for (CoolCSVColumn column : columns) {
+				if (column.getColumnName().equals(columnName)) {
+					result = true;
+					break;
+				}
+			}
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    public int getColumnIndex(String columnName) {
+	public int getColumnIndex(String columnName) {
 
-        int index = -1;
+		int index = -1;
 
-        if (isColumnPropertiesDefined()) {
-            for (int i = 0; i < columns.length; i++) {
-                CoolCSVColumn column = columns[i];
-                if (column.getColumnName().equals(columnName)) {
-                    index = i;
-                    break;
-                }
-            }
-        }
+		if (isColumnPropertiesDefined()) {
+			for (int i = 0; i < columns.length; i++) {
+				CoolCSVColumn column = columns[i];
+				if (column.getColumnName().equals(columnName)) {
+					index = i;
+					break;
+				}
+			}
+		}
 
-        return index;
-    }
+		return index;
+	}
 
-    private int getColumnIndexInternalUse(String columnName) throws ColumnNameNotFoundException {
+	private int getColumnIndexInternalUse(String columnName)
+			throws ColumnNameNotFoundException {
 
-        int index = getColumnIndex(columnName);
+		int index = getColumnIndex(columnName);
 
-        if (index < 0) {
-            throw new ColumnNameNotFoundException(String.format("Column name \"%s\" is not valid.", columnName));
-        }
+		if (index < 0) {
+			throw new ColumnNameNotFoundException(String.format(
+					"Column name \"%s\" is not valid.", columnName));
+		}
 
-        return index;
-    }
+		return index;
+	}
 
-    private String getRecord(int columnIndex) throws ColumnIndexNotValidException {
-        checkForValidColumnIndex(columnIndex);
+	private String getRecord(int columnIndex)
+			throws ColumnIndexNotValidException {
+		checkForValidColumnIndex(columnIndex);
 
-        return record[columnIndex];
-    }
+		return record[columnIndex];
+	}
 
-    private CoolCSVColumn getColumnProperty(int columnIndex) throws ColumnIndexNotValidException {
-        checkForValidColumnIndex(columnIndex);
-        CoolCSVColumn column = null;
+	private CoolCSVColumn getColumnProperty(int columnIndex)
+			throws ColumnIndexNotValidException {
+		checkForValidColumnIndex(columnIndex);
+		CoolCSVColumn column = null;
 
-        if (isColumnPropertiesDefined()) {
-            column = columns[columnIndex];
-        } else {
-            column = new CoolCSVColumn(null, columnIndex, String.class.getName());
-        }
+		if (isColumnPropertiesDefined()) {
+			column = columns[columnIndex];
+		} else {
+			column = new CoolCSVColumn(null, columnIndex);
+		}
 
-        return column;
-    }
+		return column;
+	}
 
-    private void checkForValidColumnIndex(int columnIndex) throws ColumnIndexNotValidException {
+	private void checkForValidColumnIndex(int columnIndex)
+			throws ColumnIndexNotValidException {
 
-        if (columnIndex < 0 || columnIndex >= record.length) {
-            throw new ColumnIndexNotValidException(String.format(
-                    "Invalid column index. Valid column index is from 0 to %d.", columns.length - 1));
-        }
-    }
+		if (columnIndex < 0 || columnIndex >= record.length) {
+			throw new ColumnIndexNotValidException(
+					String.format(
+							"Invalid column index. Valid column index is from 0 to %d.",
+							columns.length - 1));
+		}
+	}
 
 }
