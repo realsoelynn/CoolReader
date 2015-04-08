@@ -12,6 +12,10 @@ public class CoolCSVColumn {
     private CoolCSVColumn() {
     }
 
+    public CoolCSVColumn(String columnName, int columnIndex) {
+        this(columnName, columnIndex, null);
+    }
+
     public CoolCSVColumn(String columnName, int columnIndex, String columnType) {
         this.columnName = columnName;
         this.columnIndex = columnIndex;
