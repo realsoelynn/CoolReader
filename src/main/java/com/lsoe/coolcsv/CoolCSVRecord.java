@@ -81,8 +81,17 @@ public class CoolCSVRecord {
 			result = (T) getDouble(columnIndex);
 		} else if (columnTypeClass.getName().equals(Long.class.getName())) {
 			result = (T) getLong(columnIndex);
+		} else if (columnTypeClass.getName().equals(boolean.class.getName())) {
+			result = (T) getBoolean(columnIndex);
+		} else if (columnTypeClass.getName().equals(int.class.getName())) {
+			result = (T) getInt(columnIndex);
+		} else if (columnTypeClass.getName().equals(double.class.getName())) {
+			result = (T) getDouble(columnIndex);
+		} else if (columnTypeClass.getName().equals(long.class.getName())) {
+			result = (T) getLong(columnIndex);
 		} else {
-			throw new CoolCSVException("Currently, only enum is supported.");
+			throw new CoolCSVException(
+					"Currently, only enum and built-in data types { String, Double, Integer, Booelan, Double, Long} are supported.");
 		}
 
 		return result;

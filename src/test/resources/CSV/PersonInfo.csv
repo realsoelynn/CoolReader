@@ -1,2 +1,2 @@
-name,weight,isMale,height,country
-Soe Lynn,54.5,true,188,MM
+name,weight,isMale,height,country,name2,weight2,isMale2,height2,country2
+Soe Lynn,54.5,true,188,MM,Xiao Zhu,51,false,170,MM

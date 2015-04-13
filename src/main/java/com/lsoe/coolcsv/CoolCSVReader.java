@@ -2,6 +2,7 @@ package com.lsoe.coolcsv;
 
 import java.io.FileReader;
 import java.io.Reader;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
 import com.googlecode.jcsv.CSVStrategy;
@@ -21,22 +22,78 @@ public class CoolCSVReader {
 
 	}
 
+	public CoolCSVReader(String csvFileURI) {
+		this(csvFileURI, null);
+	}
 	public CoolCSVReader(String csvFileURI, CoolCSVColumn[] columns) {
 
 		this.csvFileURI = csvFileURI;
 		this.columns = columns;
 	}
 
-	public Object[][] readAllAsCustomObject(Class<?>... customObjectClass)
-			throws Exception {
+	public <T> Object[][] readAllAsCustomObject(
+			CoolConstructor... coolConstructors) throws Exception {
 
-		for (Class<?> c : customObjectClass) {
+		ArrayList<Object[]> records = new ArrayList<Object[]>();
+		CoolCSVRecord[] coolCSVRecords = readAllAsCoolCSVRecord();
+		int columnIndex = 0;
 
+		for (CoolCSVRecord coolCSVRecord : coolCSVRecords) {
+
+			ArrayList<Object> record = new ArrayList<Object>();
+
+			for (int i = 0; i < coolConstructors.length; i++) {
+
+				CoolConstructor coolConstructor = coolConstructors[i];
+				Class<?> customObjectClass = coolConstructor
+						.getConstructorClass();
+				Class<?>[] paramsType = coolConstructor.getConstructorParams()
+						.getParamsType();
+				Constructor<?> constructor = customObjectClass
+						.getConstructor(paramsType);
+				ArrayList<Object> constructorParams = new ArrayList<Object>();
+
+				for (int j = 0; j < paramsType.length; j++) {
+
+					constructorParams.add(coolCSVRecord.get(columnIndex++,
+							paramsType[j]));
+				}
+
+				record.add(constructor.newInstance(constructorParams.toArray()));
+			}
+
+			records.add(record.toArray());
 		}
 
-		return null;
+		return records.toArray(new Object[records.size()][]);
 	}
 
+	public <T> Object[][] readAllAsCustomObject(Class<T> customObjectClass,
+			CoolConstructorParams parameterTypes) throws Exception {
+
+		Class<?>[] paramsType = parameterTypes.getParamsType();
+
+		ArrayList<Object[]> records = new ArrayList<Object[]>();
+		Constructor<?> constructor = customObjectClass
+				.getConstructor(paramsType);
+		CoolCSVRecord[] coolCSVRecords = readAllAsCoolCSVRecord();
+
+		for (CoolCSVRecord coolCSVRecord : coolCSVRecords) {
+
+			ArrayList<Object> record = new ArrayList<Object>();
+			ArrayList<Object> constructorParams = new ArrayList<Object>();
+
+			for (int i = 0; i < paramsType.length; i++) {
+
+				constructorParams.add(coolCSVRecord.get(i, paramsType[i]));
+			}
+
+			record.add(constructor.newInstance(constructorParams.toArray()));
+			records.add(record.toArray());
+		}
+
+		return records.toArray(new Object[records.size()][]);
+	}
 	public CoolCSVRecord[] readAllAsCoolCSVRecord() throws Exception {
 
 		ArrayList<CoolCSVRecord> records = new ArrayList<CoolCSVRecord>();
