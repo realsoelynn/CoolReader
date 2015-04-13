@@ -64,4 +64,18 @@ public class CoolCSVReaderTest {
 		assertEquals("Myanmar", country.getCountry());
 	}
 
+	@Test
+	public void testReadAllAsCustomObject() throws Exception {
+		String csvFileURI = "/Users/lsoe/Documents/workspace-sts-3.6.3.RELEASE/CoolCSV/src/test/resources/CSV/PersonInfo.csv";
+		CoolCSVColumn[] columns = new CoolCSVColumn[]{
+				new CoolCSVColumn("name", 0, String.class),
+				new CoolCSVColumn("weight", 1, Double.class),
+				new CoolCSVColumn("isMale", 2, Boolean.class),
+				new CoolCSVColumn("height", 3, Integer.class),
+				new CoolCSVColumn("country", 4, Country.class)};
+		CoolCSVReader csvReader = new CoolCSVReader(csvFileURI, columns);
+
+		csvReader.readAllAsCustomObject(String.class, Integer.class);
+	}
+
 }

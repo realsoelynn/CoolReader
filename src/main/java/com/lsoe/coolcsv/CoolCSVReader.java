@@ -27,6 +27,16 @@ public class CoolCSVReader {
 		this.columns = columns;
 	}
 
+	public Object[][] readAllAsCustomObject(Class<?>... customObjectClass)
+			throws Exception {
+
+		for (Class<?> c : customObjectClass) {
+
+		}
+
+		return null;
+	}
+
 	public CoolCSVRecord[] readAllAsCoolCSVRecord() throws Exception {
 
 		ArrayList<CoolCSVRecord> records = new ArrayList<CoolCSVRecord>();

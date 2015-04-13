@@ -60,4 +60,5 @@ public class CoolCSVRecordTest {
 		assertTrue("Column \"name\" is expected to be exists.",
 				coolRecord.has("name"));
 	}
+
 }
