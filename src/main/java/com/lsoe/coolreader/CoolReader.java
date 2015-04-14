@@ -7,9 +7,13 @@ import com.lsoe.coolreader.datasource.CSVDataSource;
 import com.lsoe.coolreader.datasource.ObjectArrayDataSource;
 
 /**
- * TODO: Describe purpose and behavior of CoolCSVReader
+ * This class reads CSV file, {@code Object[][]} or any {@code CoolDataSource}
+ * and takes each row data to be instantiated into instance of specified
+ * {@code class}. Yes! It is that COOL.
+ * 
+ * @author Soe Lynn
  */
-public class CoolReader {
+public final class CoolReader {
 
 	private CoolDataSource datasource;
 
