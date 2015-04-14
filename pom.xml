@@ -1,11 +1,39 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.lsoe</groupId>
-	<artifactId>CoolCSV</artifactId>
+	<groupId>com.lynnnerd.coolreader</groupId>
+	<artifactId>lynnnerd-coolreader</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Cool CSV</name>
-	<description>This is a cool CSV library for java.</description>
+	<packaging>jar</packaging>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>This is a library that allows dynamic conversion of data from CSV file or other types of data source without the need to write CellProcessor like SuperCSV.</description>
+
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Soe Lynn</name>
+			<email>soelynn007@gmail.com</email>
+			<organization>LinnNerd</organization>
+			<organizationUrl>https://github.com/soelynn</organizationUrl>
+		</developer>
+	</developers>
+	
+	<scm>
+		<connection>scm:git:git@github.com:soelynn/CoolReader.git</connection>
+		<developerConnection>scm:git:git@github.com:soelynn/CoolReader.git</developerConnection>
+		<url>git@github.com:soelynn/CoolReader.git</url>
+	</scm>
+
+	<properties>
+		<releaseUrl>http://nexus.paypal.com/nexus/content/repositories/releases</releaseUrl>
+		<snapshotUrl>http://nexus.paypal.com/nexus/content/repositories/snapshots</snapshotUrl>
+	</properties>
 
 	<distributionManagement>
 		<repository>
@@ -18,11 +46,6 @@
 			<url>${snapshotUrl}</url>
 		</snapshotRepository>
 	</distributionManagement>
-
-	<properties>
-		<releaseUrl>http://nexus.paypal.com/nexus/content/repositories/releases</releaseUrl>
-		<snapshotUrl>http://nexus.paypal.com/nexus/content/repositories/snapshots</snapshotUrl>
-	</properties>
 
 	<dependencies>
 		<dependency>
