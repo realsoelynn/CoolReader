@@ -7,11 +7,16 @@ jCSV is awesome. But, I was using it for writing test cases and I thought wouldn
 # Example
 # Usecase 1 (TestNG dataprovider):
 ```
-@DataProvider(name="data")
+@DataProvider(name = "data")
 public Object[][] data() { 
 	CoolReader csvReader = new CoolReader(csvFileURI);
-	CoolConstructorParams userParams = new CoolConstructorParams(String.class, double.class,boolean.class, int.class, 	Country.class);
+	CoolConstructorParams userParams = new CoolConstructorParams(String.class, double.class,boolean.class, int.class, Country.class);
 	return csvReader.readAllAsCustomObject(User.class, userParams);
+}
+
+@Test(dataProvider = "data")
+public void run(User user) {
+	assert("Smith", user.getName());
 }
 
 ```
