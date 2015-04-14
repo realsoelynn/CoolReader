@@ -1,4 +1,4 @@
-package com.lsoe.coolcsv;
+package com.lsoe.coolreader;
 
 /**
  * TODO: Describe purpose and behavior of CoolConstructor
@@ -10,6 +10,8 @@ public class CoolConstructor {
 
 	// TODO: Disable the default constructor and write print function to show
 	// the tutorial on how to write correctly
+	private CoolConstructor() {
+	}
 
 	public CoolConstructor(Class<?> constructorClass,
 			CoolConstructorParams constructorParams) {

@@ -1,9 +1,9 @@
-package com.lsoe.coolcsv.exception;
+package com.lsoe.coolreader.exception;
 
 /**
  * TODO: Describe purpose and behavior of ColumnIndexNotValidException
  */
-public class ColumnIndexNotValidException extends CoolCSVException {
+public class ColumnIndexNotValidException extends CoolReaderException {
 
     /**
      * 

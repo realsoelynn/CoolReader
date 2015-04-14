@@ -1,22 +1,22 @@
-package com.lsoe.coolcsv;
+package com.lsoe.coolreader;
 
 /**
  * TODO: Describe purpose and behavior of CoolCSVColumn
  */
-public class CoolCSVColumn {
+public class CoolColumn {
 
 	private String columnName;
 	private int columnIndex;
 	private Class<?> columnType; // must be java full qualifier class name
 
-	private CoolCSVColumn() {
+	private CoolColumn() {
 	}
 
-	public CoolCSVColumn(String columnName, int columnIndex) {
+	public CoolColumn(String columnName, int columnIndex) {
 		this(columnName, columnIndex, String.class);
 	}
 
-	public CoolCSVColumn(String columnName, int columnIndex,
+	public CoolColumn(String columnName, int columnIndex,
 			Class<?> columnTypeClass) {
 		this.columnName = columnName;
 		this.columnIndex = columnIndex;

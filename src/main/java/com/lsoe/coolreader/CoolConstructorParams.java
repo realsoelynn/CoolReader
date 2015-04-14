@@ -1,4 +1,4 @@
-package com.lsoe.coolcsv;
+package com.lsoe.coolreader;
 
 /**
  * TODO: Describe purpose and behavior of CoolConstructorParams

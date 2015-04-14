@@ -1,4 +1,4 @@
-package com.lsoe.coolcsv.test.enums;
+package com.lsoe.coolreader.test.enums;
 
 /**
  * TODO: Describe purpose and behavior of Country

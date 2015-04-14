@@ -1,28 +1,30 @@
-package com.lsoe.coolcsv;
+package com.lsoe.coolreader;
 
-import com.lsoe.coolcsv.exception.ColumnIndexNotValidException;
-import com.lsoe.coolcsv.exception.ColumnNameNotFoundException;
-import com.lsoe.coolcsv.exception.CoolCSVException;
+import java.lang.reflect.Constructor;
+
+import com.lsoe.coolreader.exception.ColumnIndexNotValidException;
+import com.lsoe.coolreader.exception.ColumnNameNotFoundException;
+import com.lsoe.coolreader.exception.CoolReaderException;
 
 /**
  * TODO: Describe purpose and behavior of CoolCSVRecord Currently, it is only
  * programmed for read-only mode
  * 
  */
-public class CoolCSVRecord {
+public class CoolRecord {
 
-	private String[] record;
-	private CoolCSVColumn[] columns;
+	private Object[] record;
+	private CoolColumn[] columns;
 	private boolean columnPropertiesDefined;
 
-	public CoolCSVRecord(String[] record) {
+	public CoolRecord(Object[] record) {
 
 		this.columns = null;
 		this.record = record;
 		this.columnPropertiesDefined = false;
 	}
 
-	public CoolCSVRecord(CoolCSVColumn[] columns, String[] record) {
+	public CoolRecord(CoolColumn[] columns, Object[] record) {
 
 		this.columns = columns;
 		this.record = record;
@@ -33,18 +35,19 @@ public class CoolCSVRecord {
 		return columnPropertiesDefined;
 	}
 
-	public String get(String columnName) throws CoolCSVException {
+	public Object get(String columnName) throws CoolReaderException {
 
 		int columnIndex = getColumnIndexInternalUse(columnName);
 
 		return getRecord(columnIndex);
 	}
 
-	public String get(int columnIndex) throws Exception {
+	public Object get(int columnIndex) throws Exception {
 
 		return getRecord(columnIndex);
 	}
 
+	// TODO:
 	public <T> T get(String columnName, Class<T> columnTypeClass)
 			throws Exception {
 
@@ -58,40 +61,52 @@ public class CoolCSVRecord {
 			throws Exception {
 
 		T result = null;
-		if (columnTypeClass.isEnum()) {
-			for (Object enumConstant : columnTypeClass.getEnumConstants()) {
-				if (enumConstant.toString().equals(getRecord(columnIndex))) {
-					result = (T) enumConstant;
-					break;
-				}
-			}
+		Object data = get(columnIndex);
 
-			if (result == null) {
-				throw new CoolCSVException(String.format(
-						"%s is not defined under the enum type %s.",
-						record[columnIndex], columnTypeClass.getName()));
+		if (data.getClass().equals(String.class)) {
+
+			if (columnTypeClass.isEnum()) {
+				for (Object enumConstant : columnTypeClass.getEnumConstants()) {
+					if (enumConstant.toString().equals(getRecord(columnIndex))) {
+						result = (T) enumConstant;
+						break;
+					}
+				}
+
+				if (result == null) {
+					throw new CoolReaderException(String.format(
+							"%s is not defined under the enum type %s.",
+							record[columnIndex], columnTypeClass.getName()));
+				}
+			} else if (columnTypeClass.getName().equals(String.class.getName())) {
+				result = (T) get(columnIndex);
+			} else if (columnTypeClass.getName()
+					.equals(Boolean.class.getName())) {
+				result = (T) getBoolean(columnIndex);
+			} else if (columnTypeClass.getName()
+					.equals(Integer.class.getName())) {
+				result = (T) getInt(columnIndex);
+			} else if (columnTypeClass.getName().equals(Double.class.getName())) {
+				result = (T) getDouble(columnIndex);
+			} else if (columnTypeClass.getName().equals(Long.class.getName())) {
+				result = (T) getLong(columnIndex);
+			} else if (columnTypeClass.getName()
+					.equals(boolean.class.getName())) {
+				result = (T) getBoolean(columnIndex);
+			} else if (columnTypeClass.getName().equals(int.class.getName())) {
+				result = (T) getInt(columnIndex);
+			} else if (columnTypeClass.getName().equals(double.class.getName())) {
+				result = (T) getDouble(columnIndex);
+			} else if (columnTypeClass.getName().equals(long.class.getName())) {
+				result = (T) getLong(columnIndex);
+			} else { // This case is assume that the custom type provided have a
+						// constructor with one String-type parameter
+				Constructor<T> constructor = columnTypeClass
+						.getConstructor(String.class);
+				result = constructor.newInstance(get(columnIndex));
 			}
-		} else if (columnTypeClass.getName().equals(String.class.getName())) {
-			result = (T) get(columnIndex);
-		} else if (columnTypeClass.getName().equals(Boolean.class.getName())) {
-			result = (T) getBoolean(columnIndex);
-		} else if (columnTypeClass.getName().equals(Integer.class.getName())) {
-			result = (T) getInt(columnIndex);
-		} else if (columnTypeClass.getName().equals(Double.class.getName())) {
-			result = (T) getDouble(columnIndex);
-		} else if (columnTypeClass.getName().equals(Long.class.getName())) {
-			result = (T) getLong(columnIndex);
-		} else if (columnTypeClass.getName().equals(boolean.class.getName())) {
-			result = (T) getBoolean(columnIndex);
-		} else if (columnTypeClass.getName().equals(int.class.getName())) {
-			result = (T) getInt(columnIndex);
-		} else if (columnTypeClass.getName().equals(double.class.getName())) {
-			result = (T) getDouble(columnIndex);
-		} else if (columnTypeClass.getName().equals(long.class.getName())) {
-			result = (T) getLong(columnIndex);
 		} else {
-			throw new CoolCSVException(
-					"Currently, only enum and built-in data types { String, Double, Integer, Booelan, Double, Long} are supported.");
+			result = (T) get(columnIndex);
 		}
 
 		return result;
@@ -106,7 +121,7 @@ public class CoolCSVRecord {
 
 	public Boolean getBoolean(int columnIndex) throws Exception {
 
-		return Boolean.parseBoolean(getRecord(columnIndex));
+		return Boolean.parseBoolean(getString(columnIndex));
 	}
 
 	public Double getDouble(String columnName) throws Exception {
@@ -118,7 +133,7 @@ public class CoolCSVRecord {
 
 	public Double getDouble(int columnIndex) throws Exception {
 
-		return Double.parseDouble(getRecord(columnIndex));
+		return Double.parseDouble(getString(columnIndex));
 	}
 
 	public Integer getInt(String columnName) throws Exception {
@@ -130,7 +145,7 @@ public class CoolCSVRecord {
 
 	public Integer getInt(int columnIndex) throws Exception {
 
-		return Integer.parseInt(getRecord(columnIndex));
+		return Integer.parseInt(getString(columnIndex));
 	}
 
 	public Long getLong(String columnName) throws Exception {
@@ -142,7 +157,19 @@ public class CoolCSVRecord {
 
 	public Long getLong(int columnIndex) throws Exception {
 
-		return Long.parseLong(getRecord(columnIndex));
+		return Long.parseLong(getString(columnIndex));
+	}
+
+	public String getString(String columnName) throws Exception {
+
+		int columnIndex = getColumnIndexInternalUse(columnName);
+
+		return getString(columnIndex);
+	}
+
+	public String getString(int columnIndex) throws Exception {
+
+		return get(columnIndex).toString();
 	}
 
 	public boolean has(String columnName) {
@@ -150,7 +177,7 @@ public class CoolCSVRecord {
 		boolean result = false;
 
 		if (isColumnPropertiesDefined()) {
-			for (CoolCSVColumn column : columns) {
+			for (CoolColumn column : columns) {
 				if (column.getColumnName().equals(columnName)) {
 					result = true;
 					break;
@@ -167,7 +194,7 @@ public class CoolCSVRecord {
 
 		if (isColumnPropertiesDefined()) {
 			for (int i = 0; i < columns.length; i++) {
-				CoolCSVColumn column = columns[i];
+				CoolColumn column = columns[i];
 				if (column.getColumnName().equals(columnName)) {
 					index = i;
 					break;
@@ -191,22 +218,22 @@ public class CoolCSVRecord {
 		return index;
 	}
 
-	private String getRecord(int columnIndex)
+	private Object getRecord(int columnIndex)
 			throws ColumnIndexNotValidException {
 		checkForValidColumnIndex(columnIndex);
 
 		return record[columnIndex];
 	}
 
-	private CoolCSVColumn getColumnProperty(int columnIndex)
+	private CoolColumn getColumnProperty(int columnIndex)
 			throws ColumnIndexNotValidException {
 		checkForValidColumnIndex(columnIndex);
-		CoolCSVColumn column = null;
+		CoolColumn column = null;
 
 		if (isColumnPropertiesDefined()) {
 			column = columns[columnIndex];
 		} else {
-			column = new CoolCSVColumn(null, columnIndex);
+			column = new CoolColumn(null, columnIndex);
 		}
 
 		return column;

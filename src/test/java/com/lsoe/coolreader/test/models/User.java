@@ -1,6 +1,6 @@
-package com.lsoe.coolcsv.test.models;
+package com.lsoe.coolreader.test.models;
 
-import com.lsoe.coolcsv.test.enums.Country;
+import com.lsoe.coolreader.test.enums.Country;
 
 /**
  * TODO: Describe purpose and behavior of User

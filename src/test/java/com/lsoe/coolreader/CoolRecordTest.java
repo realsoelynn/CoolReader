@@ -1,4 +1,4 @@
-package com.lsoe.coolcsv;
+package com.lsoe.coolreader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -6,10 +6,10 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.lsoe.coolcsv.exception.ColumnNameNotFoundException;
-import com.lsoe.coolcsv.test.enums.Country;
+import com.lsoe.coolreader.exception.ColumnNameNotFoundException;
+import com.lsoe.coolreader.test.enums.Country;
 
-public class CoolCSVRecordTest {
+public class CoolRecordTest {
 
 	@Test(expected = ColumnNameNotFoundException.class)
 	public void testRecordWithoutColumnPropertiesSpecifiedScenario()
@@ -17,8 +17,8 @@ public class CoolCSVRecordTest {
 
 		String[] record = new String[]{"Soe Lynn", "54.5", "true", "188", "MM"};
 
-		CoolCSVRecord coolRecord = new CoolCSVRecord(record);
-		String name = coolRecord.get(0);
+		CoolRecord coolRecord = new CoolRecord(record);
+		String name = coolRecord.getString(0);
 		double weight = coolRecord.getDouble(1);
 		boolean isMale = coolRecord.getBoolean(2);
 		int height = coolRecord.getInt(3);
@@ -39,14 +39,13 @@ public class CoolCSVRecordTest {
 	public void testRecordWithColumnPropertiesSpecifiedScenario()
 			throws Exception {
 
-		CoolCSVColumn[] columns = new CoolCSVColumn[]{
-				new CoolCSVColumn("name", 0), new CoolCSVColumn("weight", 1),
-				new CoolCSVColumn("isMale", 2), new CoolCSVColumn("height", 3),
-				new CoolCSVColumn("country", 4)};
+		CoolColumn[] columns = new CoolColumn[]{new CoolColumn("name", 0),
+				new CoolColumn("weight", 1), new CoolColumn("isMale", 2),
+				new CoolColumn("height", 3), new CoolColumn("country", 4)};
 		String[] record = new String[]{"Soe Lynn", "54.5", "true", "188", "MM"};
 
-		CoolCSVRecord coolRecord = new CoolCSVRecord(columns, record);
-		String name = coolRecord.get("name");
+		CoolRecord coolRecord = new CoolRecord(columns, record);
+		String name = coolRecord.getString("name");
 		double weight = coolRecord.getDouble("weight");
 		boolean isMale = coolRecord.getBoolean("isMale");
 		int height = coolRecord.getInt("height");

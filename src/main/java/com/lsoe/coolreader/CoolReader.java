@@ -1,44 +1,58 @@
-package com.lsoe.coolcsv;
+package com.lsoe.coolreader;
 
-import java.io.FileReader;
-import java.io.Reader;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
-import com.googlecode.jcsv.CSVStrategy;
-import com.googlecode.jcsv.reader.CSVReader;
-import com.googlecode.jcsv.reader.internal.CSVReaderBuilder;
-import com.googlecode.jcsv.reader.internal.DefaultCSVEntryParser;
+import com.lsoe.coolreader.datasource.CSVDataSource;
+import com.lsoe.coolreader.datasource.ObjectArrayDataSource;
 
 /**
  * TODO: Describe purpose and behavior of CoolCSVReader
  */
-public class CoolCSVReader {
+public class CoolReader {
 
-	private String csvFileURI;
-	private CoolCSVColumn[] columns;
+	private CoolDataSource datasource;
 
-	private CoolCSVReader() {
-
+	private CoolReader() {
 	}
 
-	public CoolCSVReader(String csvFileURI) {
+	public CoolReader(String csvFileURI) {
+
 		this(csvFileURI, null);
 	}
-	public CoolCSVReader(String csvFileURI, CoolCSVColumn[] columns) {
 
-		this.csvFileURI = csvFileURI;
-		this.columns = columns;
+	public CoolReader(String csvFileURI, CoolColumn[] columns) {
+		datasource = new CSVDataSource(csvFileURI, columns);
+	}
+
+	public CoolReader(Object[][] data) {
+		this(data, null);
+	}
+
+	public CoolReader(Object[][] data, CoolColumn[] columns) {
+		datasource = new ObjectArrayDataSource(columns, data);
+	}
+
+	public CoolReader(CoolDataSource datasource) {
+		this.datasource = datasource;
+	}
+
+	public CoolDataSource getDatasource() {
+		return datasource;
+	}
+
+	public void setDatasource(CoolDataSource datasource) {
+		this.datasource = datasource;
 	}
 
 	public <T> Object[][] readAllAsCustomObject(
 			CoolConstructor... coolConstructors) throws Exception {
 
 		ArrayList<Object[]> records = new ArrayList<Object[]>();
-		CoolCSVRecord[] coolCSVRecords = readAllAsCoolCSVRecord();
+		CoolRecord[] coolCSVRecords = readAllAsCoolRecord();
 		int columnIndex = 0;
 
-		for (CoolCSVRecord coolCSVRecord : coolCSVRecords) {
+		for (CoolRecord coolCSVRecord : coolCSVRecords) {
 
 			ArrayList<Object> record = new ArrayList<Object>();
 
@@ -76,9 +90,9 @@ public class CoolCSVReader {
 		ArrayList<Object[]> records = new ArrayList<Object[]>();
 		Constructor<?> constructor = customObjectClass
 				.getConstructor(paramsType);
-		CoolCSVRecord[] coolCSVRecords = readAllAsCoolCSVRecord();
+		CoolRecord[] coolCSVRecords = readAllAsCoolRecord();
 
-		for (CoolCSVRecord coolCSVRecord : coolCSVRecords) {
+		for (CoolRecord coolCSVRecord : coolCSVRecords) {
 
 			ArrayList<Object> record = new ArrayList<Object>();
 			ArrayList<Object> constructorParams = new ArrayList<Object>();
@@ -94,45 +108,16 @@ public class CoolCSVReader {
 
 		return records.toArray(new Object[records.size()][]);
 	}
-	public CoolCSVRecord[] readAllAsCoolCSVRecord() throws Exception {
-
-		ArrayList<CoolCSVRecord> records = new ArrayList<CoolCSVRecord>();
-		Reader reader = new FileReader(csvFileURI);
-		CSVReader<String[]> csvReader = new CSVReaderBuilder<String[]>(reader)
-				.entryParser(new DefaultCSVEntryParser())
-				.strategy(CSVStrategy.UK_DEFAULT).build();
-
-		boolean hasColumnRowSkipped = false;
-		for (String[] csvReaderRecord : csvReader.readAll()) {
-
-			if (!hasColumnRowSkipped) {
-				hasColumnRowSkipped = true;
-				continue;
-			}
-
-			CoolCSVRecord record = null;
-
-			if (columns == null || columns.length < 0) {
-				record = new CoolCSVRecord(csvReaderRecord);
-			} else {
-				record = new CoolCSVRecord(columns, csvReaderRecord);
-			}
-
-			records.add(record);
-		}
-
-		return records.toArray(new CoolCSVRecord[records.size()]);
-	}
 
 	public Object[][] readAll() throws Exception {
 
-		CoolCSVRecord[] csvRecords = readAllAsCoolCSVRecord();
+		CoolRecord[] csvRecords = readAllAsCoolRecord();
 		ArrayList<Object[]> records = new ArrayList<Object[]>();
 
-		for (CoolCSVRecord csvRecord : csvRecords) {
+		for (CoolRecord csvRecord : csvRecords) {
 
 			ArrayList<Object> record = new ArrayList<Object>();
-			for (CoolCSVColumn column : columns) {
+			for (CoolColumn column : datasource.getColumns()) {
 				record.add(csvRecord.get(column.getColumnIndex(),
 						column.getColumnType()));
 			}
@@ -141,5 +126,10 @@ public class CoolCSVReader {
 		}
 
 		return records.toArray(new Object[records.size()][]);
+	}
+
+	public CoolRecord[] readAllAsCoolRecord() throws Exception {
+
+		return datasource.read();
 	}
 }

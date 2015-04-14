@@ -1,15 +1,15 @@
-package com.lsoe.coolcsv.exception;
+package com.lsoe.coolreader.exception;
 
 /**
  * TODO: Describe purpose and behavior of CoolCSVException
  */
-public class CoolCSVException extends Exception {
+public class CoolReaderException extends Exception {
 
-    public CoolCSVException() {
+    public CoolReaderException() {
         this("Oh snap! Shit happened. Please report to soelynn007@gmail.com with full stacktrace.");
     }
 
-    public CoolCSVException(String msg) {
+    public CoolReaderException(String msg) {
         super(msg);
     }
 
