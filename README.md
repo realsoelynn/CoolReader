@@ -4,8 +4,7 @@ Simple and easy to use library to read csv file or other type of data source and
 # Movitation
 jCSV is awesome. But, I was using it for writing test cases and I thought wouldn't it be cooler if I can just mention which csv file to load the data and instantiate the java Object without having to write the conversion code!!!
 
-# Example
-# Usecase 1 (TestNG dataprovider):
+# Example 1 (TestNG dataprovider):
 ```
 @DataProvider(name = "data")
 public Object[][] data() { 
