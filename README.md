@@ -5,21 +5,13 @@ Simple and easy to use library to read csv file or other type of data source and
 jCSV is awesome. But, I was using it for writing test cases and I thought wouldn't it be cooler if I can just mention which csv file to load the data and instantiate the java Object without having to write the conversion code!!!
 
 # Example
-# Usecase 1:
+# Usecase 1 (TestNG dataprovider):
 ```
-CoolReader csvReader = new CoolReader(csvFileURI);
-User user = (User) csvReader.readAllAsCustomObject(User.class,
-				new CoolConstructorParams(String.class, double.class,
-						boolean.class, int.class, Country.class))[0][0];
-```
+@DataProvider(name="data")
+public Object[][] data() { 
+	CoolReader csvReader = new CoolReader(csvFileURI);
+	CoolConstructorParams userParams = new CoolConstructorParams(String.class, double.class,boolean.class, int.class, 	Country.class);
+	return csvReader.readAllAsCustomObject(User.class, userParams);
+}
 
-# Usecase 2:
-```
-Object[][] data = new Object[][]{
-		new Object[]{"Soe Lynn", 54.5, true, 188, Country.MM}
-};
-CoolReader reader = new CoolReader(data);
-User user = (User) csvReader.readAllAsCustomObject(User.class,
-				new CoolConstructorParams(String.class, double.class,
-						boolean.class, int.class, Country.class))[0][0];
 ```
