@@ -18,7 +18,7 @@ public class CoolReaderTest {
 	@Test
 	public void testReadAllAsCoolRecord() throws Exception {
 
-		String csvFileURI = "/Users/lsoe/Documents/workspace-sts-3.6.3.RELEASE/CoolCSV/src/test/resources/CSV/PersonInfo.csv";
+		String csvFileURI = "src/test/resources/CSV/PersonInfo.csv";
 		CoolColumn[] columns = new CoolColumn[]{new CoolColumn("name", 0),
 				new CoolColumn("weight", 1), new CoolColumn("isMale", 2),
 				new CoolColumn("height", 3), new CoolColumn("country", 4)};
@@ -42,7 +42,7 @@ public class CoolReaderTest {
 	@Test
 	public void testReadAllAsObjectArrays() throws Exception {
 
-		String csvFileURI = "/Users/lsoe/Documents/workspace-sts-3.6.3.RELEASE/CoolCSV/src/test/resources/CSV/PersonInfo.csv";
+		String csvFileURI = "src/test/resources/CSV/PersonInfo.csv";
 		CoolColumn[] columns = new CoolColumn[]{
 				new CoolColumn("name", 0, String.class),
 				new CoolColumn("weight", 1, Double.class),
@@ -68,7 +68,7 @@ public class CoolReaderTest {
 
 	@Test
 	public void testReadAllAsCustomObject() throws Exception {
-		String csvFileURI = "/Users/lsoe/Documents/workspace-sts-3.6.3.RELEASE/CoolCSV/src/test/resources/CSV/PersonInfo.csv";
+		String csvFileURI = "src/test/resources/CSV/PersonInfo.csv";
 		CoolReader csvReader = new CoolReader(csvFileURI);
 
 		User user = (User) csvReader.readAllAsCustomObject(User.class,
@@ -84,7 +84,7 @@ public class CoolReaderTest {
 
 	@Test
 	public void testReadAllAsCustomObjectUsingCoolConstrutor() throws Exception {
-		String csvFileURI = "/Users/lsoe/Documents/workspace-sts-3.6.3.RELEASE/CoolCSV/src/test/resources/CSV/PersonInfo.csv";
+		String csvFileURI = "src/test/resources/CSV/PersonInfo.csv";
 		CoolReader csvReader = new CoolReader(csvFileURI);
 
 		Object[] users = csvReader.readAllAsCustomObject(
