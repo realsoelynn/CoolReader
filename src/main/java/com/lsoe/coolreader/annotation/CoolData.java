@@ -16,4 +16,5 @@ public @interface CoolData {
 
 	Class<?>[] columns();
 
+	CoolConstructor[] constructors() default {};
 }
