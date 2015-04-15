@@ -9,6 +9,7 @@ public class CoolColumn {
 	private int columnIndex;
 	private Class<?> columnType; // must be java full qualifier class name
 
+	@SuppressWarnings("unused")
 	private CoolColumn() {
 	}
 

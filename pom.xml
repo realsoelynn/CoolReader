@@ -23,12 +23,21 @@
 			<organizationUrl>https://github.com/soelynn</organizationUrl>
 		</developer>
 	</developers>
-	
+
 	<scm>
 		<connection>scm:git:git@github.com:soelynn/CoolReader.git</connection>
 		<developerConnection>scm:git:git@github.com:soelynn/CoolReader.git</developerConnection>
 		<url>git@github.com:soelynn/CoolReader.git</url>
 	</scm>
+
+	<ciManagement>
+		<system>CircleCI</system>
+		<url>https://circleci.com/gh/soelynn/CoolReader</url>
+	</ciManagement>
+
+	<prerequisites>
+		<maven>3</maven>
+	</prerequisites>
 
 	<properties>
 		<releaseUrl>http://nexus.paypal.com/nexus/content/repositories/releases</releaseUrl>
@@ -47,16 +56,36 @@
 		</snapshotRepository>
 	</distributionManagement>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<compilerArgument>-proc:none</compilerArgument>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.googlecode.jcsv</groupId>
 			<artifactId>jcsv</artifactId>
 			<version>1.4.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.testing.compile</groupId>
+			<artifactId>compile-testing</artifactId>
+			<version>0.6</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

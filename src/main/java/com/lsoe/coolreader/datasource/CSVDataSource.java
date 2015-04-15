@@ -22,6 +22,7 @@ public class CSVDataSource extends CoolDataSource {
 	public CSVDataSource(String csvFileURI, CoolColumn[] columns) {
 		super(columns);
 		this.csvFileURI = csvFileURI;
+
 	}
 
 	public CoolRecord[] read() throws Exception {
@@ -42,16 +43,20 @@ public class CSVDataSource extends CoolDataSource {
 
 			CoolRecord record = null;
 
+			// Column Detail is not provided by user. So, default is set to
+			// String for all columns
 			if (columns == null || columns.length < 0) {
-				record = new CoolRecord(csvReaderRecord);
-			} else {
-				record = new CoolRecord(columns, csvReaderRecord);
+
+				columns = new CoolColumn[csvReaderRecord.length];
+				for (int i = 0; i < columns.length; i++) {
+					columns[i] = new CoolColumn(null, i, String.class);
+				}
 			}
+			record = new CoolRecord(columns, csvReaderRecord);
 
 			records.add(record);
 		}
 
 		return records.toArray(new CoolRecord[records.size()]);
 	}
-
 }
