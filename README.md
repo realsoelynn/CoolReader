@@ -1,4 +1,5 @@
 # CoolReader
+https://circleci.com/gh/soelynn/CoolReader.png
 Simple and easy to use library to read csv file or other type of data source and have them instantiated into java Object without having to write CellProcessor like in SuperCSV. All in all, it's COOL!!!
 
 # Movitation
