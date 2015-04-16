@@ -1,4 +1,4 @@
 machine:
    java:
       version: 
-         oraclejdk6,openjdk6
+         openjdk6
