@@ -78,7 +78,7 @@ public class CoolAnnotationProcessor {
 						String.format(
 								"\n%1$s {\n       %2$s %3$s; => public %2$s %3$s;\n}\n Please do the change suggested so that CoolReader will be able to inject the data.",
 								field.getDeclaringClass(), field
-										.getGenericType().getTypeName(), field
+										.getGenericType().toString(), field
 										.getName()));
 			}
 		}
