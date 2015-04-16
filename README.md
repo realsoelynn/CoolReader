@@ -1,5 +1,5 @@
 # CoolReader
-**Continuous Integration:** [![Circle CI](https://circleci.com/gh/soelynn/CoolReader.svg?style=shield)](https://circleci.com/gh/soelynn/CoolReader)
+[![Circle CI](https://circleci.com/gh/soelynn/CoolReader.svg?style=shield)](https://circleci.com/gh/soelynn/CoolReader)[![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 
 Simple and easy to use library to read csv file or other type of data source and have them instantiated into java Object without having to write CellProcessor like in SuperCSV. All in all, it's COOL!!!
 
