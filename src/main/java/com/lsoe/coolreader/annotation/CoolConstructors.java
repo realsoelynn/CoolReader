@@ -6,13 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * TODO: Describe purpose and behavior of CoolData
+ * TODO: Describe purpose and behavior of CoolConstructors
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CoolData {
+public @interface CoolConstructors {
 
-	String csvFileURI();
-
-	Class<?>[] columns() default {};
+	CoolConstructor[] value();
 }

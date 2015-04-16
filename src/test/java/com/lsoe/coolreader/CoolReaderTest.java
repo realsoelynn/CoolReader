@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.lsoe.coolreader.annotation.CoolData;
 import com.lsoe.coolreader.datasource.ObjectArrayDataSource;
 import com.lsoe.coolreader.test.enums.Country;
 import com.lsoe.coolreader.test.models.User;
@@ -148,9 +147,10 @@ public class CoolReaderTest {
 		CoolReader reader = new CoolReader(data);
 
 		Object[] users = reader.readAllAsCustomObject(
-				new CoolConstructor(User.class, new CoolConstructorParams(
-						String.class, double.class, boolean.class, int.class,
-						Country.class)), new CoolConstructor(User.class,
+				new com.lsoe.coolreader.CoolConstructor(User.class,
+						new CoolConstructorParams(String.class, double.class,
+								boolean.class, int.class, Country.class)),
+				new com.lsoe.coolreader.CoolConstructor(User.class,
 						new CoolConstructorParams(String.class, double.class,
 								boolean.class, int.class, Country.class)))[0];
 
@@ -208,36 +208,6 @@ public class CoolReaderTest {
 		assertEquals(Boolean.class, records[0][2].getClass());
 		assertEquals(Integer.class, records[0][3].getClass());
 		assertEquals(Country.class, records[0][4].getClass());
-	}
-
-	/*
-	 * This test the Annotation CoolData
-	 */
-	@CoolData(csvFileURI = "src/test/resources/CSV/PersonInfo.csv", columns = {
-			String.class, double.class, boolean.class, int.class, Country.class})
-	Object[][] data;
-	@Test
-	public void testCoolDataInject() throws Exception {
-
-		CoolReader.inject(this);
-
-		assertEquals(String.class, data[0][0].getClass());
-		assertEquals(Double.class, data[0][1].getClass());
-		assertEquals(Boolean.class, data[0][2].getClass());
-		assertEquals(Integer.class, data[0][3].getClass());
-		assertEquals(Country.class, data[0][4].getClass());
-
-		String name = (String) data[0][0];
-		double weight = (Double) data[0][1];
-		boolean isMale = (Boolean) data[0][2];
-		int height = (Integer) data[0][3];
-		Country country = (Country) data[0][4];
-
-		assertEquals("Soe Lynn", name);
-		assertEquals(54.5, weight, 0);
-		assertTrue("Expected isMale to be true.", isMale);
-		assertEquals(188, height);
-		assertEquals("Myanmar", country.getCountry());
 	}
 
 }

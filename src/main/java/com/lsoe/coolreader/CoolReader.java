@@ -1,10 +1,9 @@
 package com.lsoe.coolreader;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import com.lsoe.coolreader.annotation.CoolData;
+import com.lsoe.coolreader.annotation.CoolAnnotationProcessor;
 import com.lsoe.coolreader.datasource.CSVDataSource;
 import com.lsoe.coolreader.datasource.ObjectArrayDataSource;
 
@@ -142,26 +141,7 @@ public final class CoolReader {
 
 	public static void inject(Object objToInject) throws Exception {
 
-		for (Field field : objToInject.getClass().getDeclaredFields()) {
+		CoolAnnotationProcessor.process(objToInject);
 
-			CoolData coolData = field.getAnnotation(CoolData.class);
-			Object[][] data = (Object[][]) field.get(objToInject);
-			if (coolData != null) {
-				CoolReader reader = new CoolReader(coolData.csvFileURI());
-
-				if (coolData.columns() != null) {
-					CoolColumn[] columns = new CoolColumn[coolData.columns().length];
-
-					for (int i = 0; i < columns.length; i++) {
-						columns[i] = new CoolColumn("", i,
-								coolData.columns()[i]);
-					}
-
-					reader.getDatasource().setColumns(columns);
-				}
-
-				field.set(objToInject, reader.readAll());
-			}
-		}
 	}
 }
