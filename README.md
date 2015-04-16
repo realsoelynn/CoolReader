@@ -7,13 +7,13 @@ Simple and easy to use library to read csv file or other type of data source and
 jCSV is awesome. But, I was using it for writing test cases and I thought wouldn't it be cooler if I can just mention which csv file to load the data and instantiate the java Object without having to write the conversion code!!! This library also supports java Annotation. You can use annotations such as @CoolData, @CoolConstructor and @CoolConstructors.
 
 # [Annotation] Example 1
-```
+```java
 public class ExampleClass {
 
 	@CoolData(csvFileURI = "src/test/resources/CSV/PersonInfo.csv",
 		     columns = {String.class, double.class, boolean.class,
 		     		int.class, Country.class})
-	Object[][] data;
+	public Object[][] data;
 
 	public ExampleClass() {
 		CoolData.inject(this);
@@ -32,13 +32,13 @@ public class ExampleClass {
 ```
 
 # [Annotation] Example 2
-```
+```java
 public class ExampleClass {
 
 	@CoolData(csvFileURI = "src/test/resources/CSV/PersonInfo.csv")
 	@CoolConstructor(constructorClass = User.class, paramTypes = {String.class,
 			double.class, boolean.class, int.class, Country.class})
-	Object[][] data;
+	public Object[][] data;
 
 	public ExampleClass() {
 		CoolData.inject(this);
@@ -57,7 +57,7 @@ public class ExampleClass {
 ```
 
 # [Annotation] Example 3
-```
+```java
 public class ExampleClass {
 
 	@CoolData(csvFileURI = "src/test/resources/CSV/PersonInfo.csv")
@@ -68,7 +68,7 @@ public class ExampleClass {
 			@CoolConstructor(constructorClass = User.class, paramTypes = {
 					String.class, double.class, boolean.class, int.class,
 					Country.class})})
-	Object[][] data;
+	public Object[][] data;
 
 	public ExampleClass() {
 		CoolData.inject(this);
@@ -87,10 +87,12 @@ public class ExampleClass {
 }
 ```
 
-# Example 2 (TestNG dataprovider):
-```
+If you don't like using java Annotation, traditional java api are available as well.
+
+# [Java API] Example
+```java
 @DataProvider(name = "data")
-public Object[][] data() { 
+public Object[][] getData() { 
 	CoolReader csvReader = new CoolReader(csvFileURI);
 	CoolConstructorParams userParams = new CoolConstructorParams(String.class, double.class,boolean.class, int.class, Country.class);
 	return csvReader.readAllAsCustomObject(User.class, userParams);
@@ -100,5 +102,6 @@ public Object[][] data() {
 public void run(User user) {
 	assert("Soe Lynn", user.getName());
 }
-
 ```
+
+You can checkout more example code inside the test package.
