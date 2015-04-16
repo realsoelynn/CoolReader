@@ -1,13 +1,3 @@
 machine:
    java:
-      version: oraclejdk6 
-
-test:
-   override:
-      - mvn integration-test
-      - update-alternatives --set java /usr/lib/jvm/jdk1.7.0/bin/java #set java7
-      - update-alternatives --set javac /usr/lib/jvm/jdk1.7.0/bin/javac
-      - mvn integration-test
-      - update-alternatives --set java /usr/lib/jvm/jdk1.8.0/bin/java #set java8
-      - update-alternatives --set javac /usr/lib/jvm/jdk1.8.0/bin/javac
-      - mvn integration-test
+      version: oraclejdk6
