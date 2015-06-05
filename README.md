@@ -95,10 +95,10 @@ If you don't like using java Annotation, traditional java api are available as w
 public Object[][] getData() { 
 	CoolReader csvReader = new CoolReader(csvFileURI);
 	CoolConstructorParams userParams = new CoolConstructorParams(String.class,
-									double.class,
-									boolean.class,
-									int.class,
-									Country.class);
+                                                                        double.class,
+                                                                        boolean.class,
+                                                                        int.class,
+                                                                        Country.class);
 	return csvReader.readAllAsCustomObject(User.class, userParams);
 }
 
